@@ -9,15 +9,17 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
-public class DeleteCourseUseCase {
+public class UpdateActiveCourseUseCase {
 
     @Autowired
     private CourseRepository courseRepository;
 
-    public void execute(UUID id) {
+    public CourseEntity execute(UUID id, CourseEntity courseEntity) {
         var course = this.courseRepository.findById(id)
                                           .orElseThrow(() -> new CourseNotFoundError("Curso não encontrado"));
 
-        this.courseRepository.delete(course);
+        course.setActive(courseEntity.getActive());
+
+        return this.courseRepository.save(course);
     }
 }

@@ -1,10 +1,7 @@
 package br.com.wasd.ofcoursedev.main.modules.courses.controllers;
 
 import br.com.wasd.ofcoursedev.main.modules.courses.entities.CourseEntity;
-import br.com.wasd.ofcoursedev.main.modules.courses.useCases.CreateCourseUseCase;
-import br.com.wasd.ofcoursedev.main.modules.courses.useCases.DeleteCourseUseCase;
-import br.com.wasd.ofcoursedev.main.modules.courses.useCases.GetCoursesUseCase;
-import br.com.wasd.ofcoursedev.main.modules.courses.useCases.UpdateCourseUseCase;
+import br.com.wasd.ofcoursedev.main.modules.courses.useCases.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +22,8 @@ public class CourseController {
     private UpdateCourseUseCase updateCourseUseCase;
     @Autowired
     private DeleteCourseUseCase deleteCourseUseCase;
+    @Autowired
+    private UpdateActiveCourseUseCase updateActiveCourseUseCase;
 
     @PostMapping("")
     public ResponseEntity<Object> createCourse(@Valid @RequestBody CourseEntity courseEntity) {
@@ -77,6 +76,20 @@ public class CourseController {
             this.deleteCourseUseCase.execute(UUID.fromString(id));
 
             return ResponseEntity.accepted().build();
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return ResponseEntity.badRequest()
+                                 .body(e.getMessage());
+        }
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Object> patchActiveCourse(@PathVariable String id, @RequestBody CourseEntity courseEntity) {
+        try {
+            var course = this.updateActiveCourseUseCase.execute(UUID.fromString(id), courseEntity);
+
+            return ResponseEntity.ok().body(course);
         } catch (Exception e) {
             e.printStackTrace();
 
