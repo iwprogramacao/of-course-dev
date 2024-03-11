@@ -2,6 +2,7 @@ package br.com.wasd.ofcoursedev.main.modules.courses.controllers;
 
 import br.com.wasd.ofcoursedev.main.modules.courses.entities.CourseEntity;
 import br.com.wasd.ofcoursedev.main.modules.courses.useCases.CreateCourseUseCase;
+import br.com.wasd.ofcoursedev.main.modules.courses.useCases.DeleteCourseUseCase;
 import br.com.wasd.ofcoursedev.main.modules.courses.useCases.GetCoursesUseCase;
 import br.com.wasd.ofcoursedev.main.modules.courses.useCases.UpdateCourseUseCase;
 import jakarta.validation.Valid;
@@ -22,6 +23,8 @@ public class CourseController {
     private GetCoursesUseCase getCoursesUseCase;
     @Autowired
     private UpdateCourseUseCase updateCourseUseCase;
+    @Autowired
+    private DeleteCourseUseCase deleteCourseUseCase;
 
     @PostMapping("")
     public ResponseEntity<Object> createCourse(@Valid @RequestBody CourseEntity courseEntity) {
@@ -60,6 +63,20 @@ public class CourseController {
 
             return ResponseEntity.ok()
                                  .body(course);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return ResponseEntity.badRequest()
+                                 .body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteCourse(@PathVariable String id) {
+        try {
+            this.deleteCourseUseCase.execute(UUID.fromString(id));
+
+            return ResponseEntity.accepted().build();
         } catch (Exception e) {
             e.printStackTrace();
 
