@@ -1,10 +1,9 @@
 package br.com.wasd.ofcoursedev.main.modules.courses.enums;
 
-import lombok.Data;
-
 public enum ActiveEnum {
+
     ACTIVE("Ativo"),
-    DEACTIVE("Desativado");
+    DEACTIVE("Desativo");
 
     private String description;
 
