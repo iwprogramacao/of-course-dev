@@ -9,4 +9,5 @@ import java.util.UUID;
 public interface CourseRepository extends JpaRepository<CourseEntity, UUID> {
 
     Optional<CourseEntity> findByName(String name);
+    Optional<CourseEntity> findById(UUID id);
 }
